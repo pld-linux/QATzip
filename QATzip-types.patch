@@ -1,0 +1,13 @@
+--- QATzip-1.0.7/utils/qzip.h.orig	2021-12-14 09:45:23.000000000 +0100
++++ QATzip-1.0.7/utils/qzip.h	2022-02-18 06:28:11.223837829 +0100
+@@ -118,8 +118,8 @@
+ #define QZ_FILELIST_DEFAULT_NUM_PER_NODE           1000
+ 
+ /* archiveproperties develop ID */
+-#define QZ7Z_DEVELOP_PREFIX             0x3ful
+-#define QZ7Z_DEVELOP_ID                 ('Q'*1ul<<32|'A'<<24|'T'<<16|'7'<<8|'z')
++#define QZ7Z_DEVELOP_PREFIX             0x3full
++#define QZ7Z_DEVELOP_ID                 ('Q'*1ull<<32|'A'<<24|'T'<<16|'7'<<8|'z')
+ #define QZ7Z_DEVELOP_SUBID              0x0a01ul
+ 
+ 
