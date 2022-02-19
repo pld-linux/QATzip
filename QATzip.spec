@@ -55,6 +55,7 @@ Pliki nagłówkowe biblioteki QATzip.
 %patch0 -p1
 
 %build
+# --build is just to omit -m$(getconf LONG_BIT)
 ./configure \
 	CFLAGS="%{rpmcflags}" \
 	LDFLAGS="%{rpmldflags}" \
@@ -62,7 +63,7 @@ Pliki nagłówkowe biblioteki QATzip.
 	--sharedlib-dir=%{_libdir} \
 	--staticlib-dir=%{_libdir} \
 	--mandir=%{_mandir} \
-	--build=x
+	--build=set
 
 %{__make}
 
