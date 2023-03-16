@@ -1,28 +1,34 @@
---- QATzip-1.0.8/configure.ac.orig	2022-08-26 23:27:15.506327523 +0200
-+++ QATzip-1.0.8/configure.ac	2022-08-27 08:20:19.899719857 +0200
-@@ -214,7 +214,7 @@ AS_IF([test "x${CFLAGS}" = "x"],
-                  -fno-delete-null-pointer-checks -fwrapv'
-     ],
-     [
--        CFLAGS+=' -Wall -Werror -std=gnu99 -pedantic \
-+        CFLAGS="$CFLAGS"' -Wall -Werror -std=gnu99 -pedantic \
-                   -fstack-protector -fPIE -fPIC -fno-strict-overflow \
-                   -fno-delete-null-pointer-checks -fwrapv'
-     ]
-@@ -225,10 +225,10 @@ AC_MSG_RESULT([yes])
- AC_MSG_CHECKING([ldflags])
- AS_IF([test "x${LDFLAGS}" = "x"],
-     [
--        LDFLAGS=' -fstack-protector -fPIC -pie -z relro -z now -Wl,-z,noexecstack'
-+        LDFLAGS=' -fPIC -pie -z relro -z now -Wl,-z,noexecstack'
-     ],
-     [
--        LDFLAGS+=' -fstack-protector -fPIC -pie -z relro -z now -Wl,-z,noexecstack'
-+        LDFLAGS="$LDFLAGS -fPIC -pie -z relro -z now -Wl,-z,noexecstack"
-     ]
- )
+--- QATzip-1.1.1/configure.ac.orig	2022-08-26 23:27:15.506327523 +0200
++++ QATzip-1.1.1/configure.ac	2022-08-27 08:20:19.899719857 +0200
+@@ -143,7 +143,7 @@ AS_IF([test ! -z "${ICP_ROOT}"],
+                                 -I${ICP_ROOT}/quickassist/include/dc/ \
+                                 -I${ICP_ROOT}/quickassist/utilities/libusdm_drv/ \
+                                 -I${ICP_ROOT}/quickassist/lookaside/access_layer/include/ "
+-            LDFLAGS+=" -Wl,-rpath,${ICP_ROOT}/build/ -L${ICP_ROOT}/build/ "
++            LDFLAGS="$LDFLAGS -Wl,-rpath,${ICP_ROOT}/build/ -L${ICP_ROOT}/build/ "
+         ]
+     )
+     AC_SUBST(ICP_INCLUDE_CFLAGS)
+@@ -211,15 +211,15 @@ AS_IF([test ! -z "${ICP_ROOT}"],
+ 
+ #check for compile flags
+ AC_MSG_CHECKING([cflags])
+-CFLAGS+=' -Wall -Werror -std=gnu99 -pedantic \
++CFLAGS="$CFLAGS "' -Wall -Werror -std=gnu99 -pedantic \
+           -fstack-protector-strong -fPIE -fPIC \
+           -fno-delete-null-pointer-checks -fwrapv'
+-AS_IF([test "x${CC}" = "xgcc"], [CFLAGS+=' -fno-strict-overflow'], [])
++AS_IF([test "x${CC}" = "xgcc"], [CFLAGS="$CFLAGS -fno-strict-overflow"], [])
  AC_MSG_RESULT([yes])
-@@ -238,11 +238,10 @@ AC_ARG_ENABLE(debug,
+ 
+ #check for compile flags
+ AC_MSG_CHECKING([ldflags])
+-LDFLAGS+=' -fstack-protector-strong -fPIC -pie -z relro -z now -Wl,-z,noexecstack'
++LDFLAGS="$LDFLAGS -fstack-protector-strong -fPIC -pie -z relro -z now -Wl,-z,noexecstack"
+ AC_MSG_RESULT([yes])
+ 
+ #Enable debug mode
+@@ -227,12 +227,10 @@ AC_ARG_ENABLE(debug,
      AS_HELP_STRING([--enable-debug], [Enable debug mode]),
      [
          debug=true
@@ -31,11 +37,12 @@
      ]      ,
      [
          debug=false
--        CFLAGS+=' -O2 -D_FORTIFY_SOURCE=2'
+-        CFLAGS+=' -O2'
+-        AS_IF([test "x${CC}" = "xgcc"], [CFLAGS+=' -D_FORTIFY_SOURCE=2'], [])
      ]
  )
  AM_CONDITIONAL([QATZIP_DEBUG_AC], [test x$debug = xtrue])
-@@ -252,7 +251,7 @@ AC_ARG_ENABLE(symbol,
+@@ -242,7 +240,7 @@ AC_ARG_ENABLE(symbol,
      AS_HELP_STRING([--enable-symbol], [Enable qatzip symbol]),
      [
          symbol=true
@@ -44,3 +51,12 @@
      ],
      [
          symbol=false
+@@ -255,7 +253,7 @@ AC_ARG_ENABLE(pthread_barrier,
+     AS_HELP_STRING([--enable-pthread-barrier], [Enable pthread_barrier]),
+     [
+         pthread_barrier=true
+-        CFLAGS+=' -DENABLE_THREAD_BARRIER'
++        CFLAGS="$CFLAGS -DENABLE_THREAD_BARRIER"
+     ],
+     [
+         pthread_barrier=false

@@ -1,4 +1,3 @@
-# NOTE: 1.0.9 requires qatlib 22.7.0, so is not available for 32-bit ABI
 #
 # Conditional build:
 %bcond_without	static_libs	# static library
@@ -6,22 +5,22 @@
 Summary:	Intel QuickAssist Technology (QAT) QATzip library
 Summary(pl.UTF-8):	Biblioteka QATzip wykorzystująca Intel QuickAssist Technology (QAT)
 Name:		QATzip
-Version:	1.0.8
+Version:	1.1.1
 Release:	1
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/intel/QATzip/releases
 Source0:	https://github.com/intel/QATzip/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	b6d4f2b002174e064a2c27718c2a5cf5
+# Source0-md5:	460777e7cef77ced9d49101572f42782
 Patch0:		%{name}-types.patch
 Patch1:		%{name}-flags.patch
 URL:		https://github.com/intel/QATzip
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	libtool >= 2:2.4
+BuildRequires:	lz4-devel
 BuildRequires:	pkgconfig
-BuildRequires:	qatlib-devel
-BuildRequires:	sed >= 4.0
+BuildRequires:	qatlib-devel >= 22.7
 BuildRequires:	zlib-devel >= 1.2.7
 Requires:	zlib >= 1.2.7
 # x86_64-specific hardware, allow userspace libs for all ABIs
@@ -55,7 +54,8 @@ Summary:	Header files for QATzip library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki QATzip
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	qatlib-devel
+Requires:	lz4-devel
+Requires:	qatlib-devel >= 22.7
 Requires:	zlib-devel >= 1.2.7
 
 %description devel
@@ -81,16 +81,10 @@ Statyczna biblioteka QATzip.
 %patch0 -p1
 %patch1 -p1
 
-# so that -I/usr/include/qat is not required when using QATzip
-%{__sed} -i -e 's,cpa_dc\.h,qat/cpa_dc.h,' include/qatzip.h
-
-%{__sed} -i -e 's,\$(find /usr -name cpa.h | xargs dirname),%{_includedir}/qat,' configure.ac
-
 %build
 %{__libtoolize}
 %{__aclocal} -I m4
 %{__autoconf}
-%{__autoheader}
 %{__automake}
 %configure \
 	--disable-silent-rules \
@@ -104,6 +98,9 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# obsoleted by pkg-config
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libqatzip.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -115,14 +112,14 @@ rm -rf $RPM_BUILD_ROOT
 %doc LICENSE README.md SECURITY.md
 %attr(755,root,root) %{_bindir}/qzip
 %attr(755,root,root) %{_libdir}/libqatzip.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libqatzip.so.2
+%attr(755,root,root) %ghost %{_libdir}/libqatzip.so.3
 %{_mandir}/man1/qzip.1*
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libqatzip.so
-%{_libdir}/libqatzip.la
 %{_includedir}/qatzip.h
+%{_pkgconfigdir}/qatzip.pc
 
 %if %{without static}
 %files static
