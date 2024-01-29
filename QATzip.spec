@@ -6,7 +6,7 @@ Summary:	Intel QuickAssist Technology (QAT) QATzip library
 Summary(pl.UTF-8):	Biblioteka QATzip wykorzystująca Intel QuickAssist Technology (QAT)
 Name:		QATzip
 Version:	1.1.2
-Release:	1
+Release:	2
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/intel/QATzip/releases
