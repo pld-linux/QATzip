@@ -5,13 +5,13 @@
 Summary:	Intel QuickAssist Technology (QAT) QATzip library
 Summary(pl.UTF-8):	Biblioteka QATzip wykorzystująca Intel QuickAssist Technology (QAT)
 Name:		QATzip
-Version:	1.1.2
-Release:	2
+Version:	1.2.0
+Release:	1
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/intel/QATzip/releases
 Source0:	https://github.com/intel/QATzip/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	e0f94367204ffda5e596983719a4b295
+# Source0-md5:	651d395b7f3df243f6a719c9928928f4
 Patch0:		%{name}-types.patch
 Patch1:		%{name}-flags.patch
 URL:		https://github.com/intel/QATzip
@@ -97,6 +97,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+%{__rm} $RPM_BUILD_ROOT%{_bindir}/qatzip-test
 
 # obsoleted by pkg-config
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/libqatzip.la
