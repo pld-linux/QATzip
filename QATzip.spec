@@ -6,7 +6,7 @@ Summary:	Intel QuickAssist Technology (QAT) QATzip library
 Summary(pl.UTF-8):	Biblioteka QATzip wykorzystująca Intel QuickAssist Technology (QAT)
 Name:		QATzip
 Version:	1.3.0
-Release:	1
+Release:	2
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/intel/QATzip/releases
@@ -86,6 +86,9 @@ Statyczna biblioteka QATzip.
 %{__aclocal} -I m4
 %{__autoconf}
 %{__automake}
+# false warning for "calloc(LSM_MET_DEPTH, sizeof(*(m->latency_array)))"
+# where LSM_MET_DEPTH is defined as (1<<(lsm_met_len_shift)) and lsm_met_len_shift is global variable = 6
+CFLAGS="%{rpmcflags} -Wno-error=alloc-size-larger-than="
 %configure \
 	--disable-silent-rules \
 	%{!?with_static_libs:--disable-static}
